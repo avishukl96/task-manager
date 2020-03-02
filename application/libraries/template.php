@@ -17,6 +17,5 @@ class template {
         }
 }
 
-/* End of file Template.php */
-/* Location: ./system/application/libraries/template.php */
+ 
 ?>

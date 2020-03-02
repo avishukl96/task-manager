@@ -22,14 +22,13 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>/assets/mobirise/css/mbr-additional.css" type="text/css">
    <script src="<?php echo base_url(); ?>/assets/web/assets/jquery/jquery.min.js"></script>
   
-  
 </head>
 <body style="background:url('<?php echo base_url(); ?>assets/images/jason-blackeye-127871-2000x1333.jpg')">
-<section class="menu cid-qvQuOC5dxP" once="menu" id="menu1-d" data-rv-view="122">
+<section class="menu cid-qvQuOC5dxP" once="menu" id="menu1-d" data-rv-view="122" >
 
     
 
-    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm bg-color transparent">
+    <nav class="header-main navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top navbar-toggleable-sm bg-color transparent" >
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <div class="hamburger">
                 <span></span>
@@ -61,15 +60,39 @@
                 <li class="nav-item">
                     <a class="nav-link link text-white display-4" href="<?php echo base_url(); ?>"> About Us </a>
                 </li>
+				<?php if($this->session->userdata('users')) { ?>
 				<li class="nav-item">
-                    <a class="nav-link link text-white display-4" href="<?php echo site_url(); ?>/user_account"> Login/Register</a>
+					 
+                    <a class="nav-link link text-white display-4" href="<?php echo site_url('task_manager/my_tasks'); ?>"> My task </a>
                 </li>
-				
+				<li class="nav-item">
+					 
+                    <a class="nav-link link text-white display-4" href="<?php echo site_url('user_account/logout'); ?>"> Logout </a>
+                </li>
+				<?php } else { ?>
+				<li class="nav-item">
+                    <a class="nav-link link text-white display-4" href="<?php echo site_url('user_account'); ?>"> Login/Register</a>
+                </li>
+				<?php } ?>
 				</ul>
+				<?php if($this->session->userdata()) { ?>
             <div class="navbar-buttons mbr-section-btn"><a class="btn btn-sm btn-black display-4" href="<?php echo base_url(); ?>">
                     
                     Try It Now!
-                </a></div>
+                </a>
+				
+				 
+				
+				</div>
+				<?php } ?>
         </div>
     </nav>
 </section>
+
+<script>
+$(document).ready(function(){
+	var site_url = '<?php echo site_url(); ?>';
+	var base_url = '<?php echo base_url(); ?>';
+})
+
+</script>

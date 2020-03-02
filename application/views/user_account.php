@@ -117,17 +117,17 @@ span.psw {
   }
 }
 </style>
-
+ 
 
  <div class="container" >
 	<div class="login-div">
-		<form class="modal-content animate col-md-6 col-md-offset-3" action="user_account/login" method="post">
+		<form class="modal-content animate col-md-6 col-md-offset-3" action="#" id="login" method="">
 			<div class="imgcontainer">
 			 <h2>Task Manager - LOGIN</h2>
 			   
 			  <!-- <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar"> -->
 			</div> 
-		 
+			<div class="login-message"></div>
 			<div class="container">
 			  <label for="uname"><b>Username</b></label>
 			  <input type="text" placeholder="Enter Username" name="uname" required>
@@ -135,7 +135,7 @@ span.psw {
 			  <label for="psw"><b>Password</b></label>
 			  <input type="password" placeholder="Enter Password" name="psw" required>
 				
-			  <button class="btn-primary" type="submit">Login</button>
+			  <button class="btn-primary login-account" type="submit">Login</button>
 			  <label class="pull-left">
 				<input type="checkbox" checked="checked" name="remember"> Remember me
 			  </label>
@@ -153,28 +153,28 @@ span.psw {
 	
 	
 	<div class="register-div">
-			<form class="modal-content animate col-md-6 col-md-offset-3" action="user_account/register" method="post">
+			<form class="modal-content animate col-md-6 col-md-offset-3" action="#" id="register">
 			<div class="imgcontainer">
 			 <h2>Task Manager - REGISTER</h2>
 			  
 			  <!-- <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar"> -->
 			</div> 
-		 
+			<div class="message"></div>
 			<div class="container">
-			  <label for="uname"><b>Username</b></label>
+			  <label for="uname"><b>Username <sup style="color:red;">*</sup></b></label>
 			  <input type="text" placeholder="Enter Username" name="username" id="username" required>
 			  
-			    <label for="uname"><b>Full Name</b></label>
+			    <label for="uname"><b>Full Name <sup style="color:red;">*</sup></b></label>
 			  <input type="text" placeholder="Enter Full Name" name="name" id="name" required>
  
 			  
-			  <label for="email"><b>Email</b></label>
+			  <label for="email"><b>Email <sup style="color:red;">*</sup></b></label>
 			  <input type="text" placeholder="Enter Email" name="email" id="email"  required>
 
-			  <label for="psw"><b>Password</b></label>
+			  <label for="psw"><b>Password <sup style="color:red;">*</sup></b></label>
 			  <input type="password" placeholder="Enter Password" name="password" id="password" required>
 			  
-			  <label for="psw"><b>Confirm Password</b></label>
+			  <label for="psw"><b>Confirm Password <sup style="color:red;">*</sup></b></label>
 			  <input type="password" placeholder="Enter Confirm Password" name="confirm-password" id="confirm-password" required>
 				
 			  <button class="register-accout btn-primary" type="submit">Register</button>
@@ -215,11 +215,11 @@ window.onclick = function(event) {
 }
 
 $(document).ready(function(){
+	 
 		$('.register-div').hide();
 	$('.register').on('click',function(){
 	 $('.register-div').show();
-	 $('.login-div').hide();
-		
+		$('.login-div').hide();
 	});
 	$('.login').on('click',function(){
 		$('.register-div').hide();
@@ -227,19 +227,61 @@ $(document).ready(function(){
 	});
 	
 	
-	$('.register-accout').on('click',function(){
+	$('.register-accout').on('click',function(e){
+		e.preventDefault();
 		
 		var password = $('#password').val();
 		var confirm_password = $('#confirm-password').val();
 		if(password != confirm_password){
 			$('#confirm-password').after('<p class="validation-error">Confirm Password is not same.</p>')
 			return false;
-			
 			}
-		
+			$.ajax({
+				url:'<?php echo site_url('user_account/register'); ?>',
+				data: $('#register').serialize(),
+				type:"POST",
+				dataType:'json',
+				success:function(response){
+					console.log(response.success);
+						$('.message').html('');
+					if(response.success){
+						var message =   response.message  ;
+						 message +=   'Please check Email '+response.email  ;
+						
+						$('.message').html('<div class="alert alert-success">'+ message + '</div>');
+						
+						location.href = '<?php echo site_url('user_account'); ?>';
+					}else{
+						$('.message').html('<div class="alert  bg-warning">'+ response.message +'</div>');
+					}
+					
+				}
+			})
 	});
-	
-	
+
+
+$('.login-account').on('click',function(e){
+		e.preventDefault();
+		 $.ajax({
+				url:'<?php echo site_url('user_account/login'); ?>',
+				data: $('#login').serialize(),
+				type:"POST",
+				dataType:'json',
+				success:function(response){
+					console.log(response)
+						$('.login-message').html('');
+					if(response.success){
+						var message =   response.message  ;
+						$('.login-message').html('<div class="alert alert-success">'+ message + '</div>');
+						
+						location.href = '<?php echo site_url('task_manager/my_tasks'); ?>';
+					}else{1
+						$('.login-message').html('<div class="alert alert-danger">'+ response.message +'</div>');
+					}
+					
+				}
+			})
+	});
 });
 
 
